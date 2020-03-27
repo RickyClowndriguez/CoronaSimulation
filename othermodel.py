@@ -6,6 +6,12 @@
 #DE for R: dRdt =    recovery_rate * I                         //The recovery rate is the inverse of the infection duration
 #DE for I: dIdt = -  dSdt - dRdt = growth_rate * S * I - recovery_rate * I // since the sum of R + I + S const, therefore dRdt + dSdt + dIdt = 0
 
+	
+NT = 1500 #days
+DT = 0.1
+t_0 = NT   #Beginning of quarantine 
+d = 100 #duration of quarantine
+trigger =  0.05 #infection precentage at which the quarantine begins
 
 def dSdt(t,S,I,R):
 	return growth_rate(t,S,I,R) * S * I *(-1.0)
@@ -17,23 +23,23 @@ def dRdt(t,S,I,R):
 	return recovery_rate(t,S,I,R)  * I 	
 	
 def growth_rate(t,S,I,R):
+	global t_0,trigger
 	c = 3.0/10.0 #the numer of people infected by one individual per day (3 in ten days)
-	if(I>0.002):
-		c=1.0/20.0
-	if(I>0.008):
-		c=3.0/10.0
+	if(I>trigger):
+		c= 1.0/10
+		if(t<t_0):
+			t_0= t
+			print("beginning")
+	if(t>t_0 + d):
+		c = 3.0/10.0 
 	return c
 
 def recovery_rate(t,S,I,R):
 	return 1.0/10.0   #if the infection lasts ten days
 
 
-	
-NT = 1000 #days
-DT = 0.1
-
 #set initial values:
-I = 0.1
+I = 0.000001
 S = 1.0 - I
 R = 0
 sus = []
@@ -86,6 +92,9 @@ ax = fig.add_subplot(111)
 ax.plot(time, sus, label =  "susceptable")
 ax.plot(time, inf, label =  "infected")
 ax.plot(time, rec, label =  "recovered")
+ax.axvspan(t_0, t_0+d, alpha=0.5, color='green')
+ax.set_xlabel("time in days")
+
 ax.legend()
 
 plt.show()
