@@ -12,6 +12,7 @@ DT = 0.1
 t_0 = NT   #Beginning of quarantine 
 d = 100 #duration of quarantine
 trigger =  0.05 #infection precentage at which the quarantine begins
+before=True
 
 def dSdt(t,S,I,R):
 	return growth_rate(t,S,I,R) * S * I *(-1.0)
@@ -23,13 +24,13 @@ def dRdt(t,S,I,R):
 	return recovery_rate(t,S,I,R)  * I 	
 	
 def growth_rate(t,S,I,R):
-	global t_0,trigger
+	global t_0,trigger,before
 	c = 3.0/10.0 #the numer of people infected by one individual per day (3 in ten days)
 	if(I>trigger):
 		c= 1.0/10
-		if(t<t_0):
+		if(before):
 			t_0= t
-			print("beginning")
+			before=False
 	if(t>t_0 + d):
 		c = 3.0/10.0 
 	return c
