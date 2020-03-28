@@ -24,7 +24,7 @@ def load_data(which=None,countries=None,daterange=None):
 	from numpy import logical_and
 	d=parse(which)
 	if countries==None:
-		countries=d.keys()
+		countries=list(d.keys())
 		countries.remove('dates')
 	max_date=d['dates'][-1]
 	min_date=d['dates'][0]
@@ -47,7 +47,9 @@ def plot_data(data,fig=None,which=None,fname=None):
 		which='Germany'
 	if not fig:
 		fig = plt.figure()
-	ax = fig.add_subplot(111)
+		ax = fig.add_subplot(111)
+	else:
+		ax=fig.gca()
 	ax.set_xlabel('Days')
 	ax.set_ylabel('N(d)')
 	ax.plot(data[which])
@@ -62,7 +64,9 @@ def plot_model(model,fig=None,fname=None):
 	import matplotlib.pyplot as plt
 	if not fig:
 		fig = plt.figure()
-	ax = fig.add_subplot(111)
+		ax = fig.add_subplot(111)
+	else:
+		ax=fig.gca()
 	ax.plot(model.time, model.sus, label =  "susceptable")
 	ax.plot(model.time, model.inf, label =  "infected")
 	ax.plot(model.time, model.rec, label =  "recovered")
@@ -89,5 +93,5 @@ if __name__ == "__main__":
 	d=load_data()
 	m=load_model()
 	fig=plot_data(d,fname='dataplot.pdf')
-	fig=plot_model(m,fname='modelplot.pdf')
+	fig=plot_model(m,fig=fig,fname='modelplot.pdf')
 	#print d

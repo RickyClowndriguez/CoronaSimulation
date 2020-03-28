@@ -43,7 +43,7 @@ def parse(which=None):
 		fl.close()
 		return data
 	except Exception as e:
-		print 'Failed to load data!'
+		print('Failed to load data!')
 		import traceback
 		traceback.print_exc()
 
