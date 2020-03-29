@@ -1,7 +1,7 @@
 
 class RK4Integrator(object):
 
-	def __init__(self):
+	def __init__(self,data=None):
 		self.N0=1500.
 		self.dt=0.1
 		self.thr=0.05
@@ -65,7 +65,6 @@ class RK4Integrator(object):
 			c = 1.0/10
 			if(t<self.t0):
 				self.t0 = t
-				print("beginning")
 		if(t>self.t0 + self.qd):
 			c = 3.0/10.0
 		return c
